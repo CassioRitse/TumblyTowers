@@ -116,19 +116,19 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 	
 	private void restartGame(){
 		this.players.clear();
-			this.entities.removeIf(entity -> entity instanceof VibratingPlatform);
-			this.entities.clear();
+		this.entities.removeIf(entity -> entity instanceof VibratingPlatform);
+		this.entities.clear();
 			
-			// Redefinir variáveis de controle
-			this.keyboard1Created = false;
-			this.keyboard2Created = false;
-			this.menuStage = true; // Volta para o estado do menu se necessário
+		// Redefinir variáveis de controle
+		this.keyboard1Created = false;
+		this.keyboard2Created = false;
+		this.menuStage = true; // Volta para o estado do menu se necessário
 		
-			// Reposicionar log ou mensagens iniciais
-			this.log.clear();
-			this.addLogEntry("Choose a game map now.");
-			this.addLogEntry("Press K and L to select the background.");
-			this.addLogEntry("When you're ready, press SPACE to join!");
+		// Reposicionar log ou mensagens iniciais
+		this.log.clear();
+		this.addLogEntry("Choose a game map now.");
+		this.addLogEntry("Press K and L to select the background.");
+		this.addLogEntry("When you're ready, press SPACE to join!");
 	}
 
 	private void startLevel() {
@@ -230,7 +230,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 			if (restartLevel && this.restartOn < System.currentTimeMillis()) {
 				restartLevel = false;
- 					this.startLevel();
+ 				this.startLevel();
 			}
 
 			this.entities.refresh();
