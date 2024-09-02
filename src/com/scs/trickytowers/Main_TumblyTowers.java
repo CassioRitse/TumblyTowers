@@ -100,7 +100,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		drawingSystem = new DrawingSystem(this);
 
 		this.addLogEntry("Choose a game map now.");
-		this.addLogEntry("Press K and J to select the background.");
+		this.addLogEntry("Press K and L to select the background.");
 		this.addLogEntry("When you're ready, press SPACE to join!");
 
 
@@ -113,10 +113,26 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		}*/
 
 	}
-
+	
+	private void restartGame(){
+		this.players.clear();
+		this.entities.removeIf(entity -> entity instanceof VibratingPlatform);
+		this.entities.clear();
+			
+		// Redefinir variáveis de controle
+		this.keyboard1Created = false;
+		this.keyboard2Created = false;
+		this.menuStage = true; // Volta para o estado do menu se necessário
+		
+		// Reposicionar log ou mensagens iniciais
+		this.log.clear();
+		this.addLogEntry("Choose a game map now.");
+		this.addLogEntry("Press K and L to select the background.");
+		this.addLogEntry("When you're ready, press SPACE to join!");
+	}
 
 	private void startLevel() {
-		this.entities.clear();// = new TSArrayList<Entity>();
+ 		this.entities.clear();// = new TSArrayList<Entity>();
 
 		Vec2 gravity = new Vec2(0f, 9.81f);
 		world = new World(gravity);
@@ -158,7 +174,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 			Edge rightEdge = new Edge(this, this.getRightBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-10), this.getRightBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL/2));
 			this.addEntity(rightEdge);*/
-
+				player.id_ZB = 0;
 				VibratingPlatform v = new VibratingPlatform(this, this.getCentreBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-20), bucketWidth*0.9f);
 				this.addEntity(v);
 
@@ -214,7 +230,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 			if (restartLevel && this.restartOn < System.currentTimeMillis()) {
 				restartLevel = false;
-				this.startLevel();
+ 				this.startLevel();
 			}
 
 			this.entities.refresh();
@@ -442,6 +458,8 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 				this.restartOn = 0;
 			}
 			
+		}else if(ke.getKeyCode() == KeyEvent.VK_O){
+			restartGame();
 		}
 	}
 
