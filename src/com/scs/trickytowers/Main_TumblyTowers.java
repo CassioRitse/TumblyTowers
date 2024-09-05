@@ -1,8 +1,10 @@
 package com.scs.trickytowers;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -75,7 +77,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		System.setProperty("net.java.games.input.librarypath", new File("libs/jinput").getAbsolutePath());
 
-		if (Statics.RELEASE_MODE == false) {
+		if (Statics.RELEASE_MODE) {
 			// Test all sounds
 			File[] files = new File("bin/assets/sfx").listFiles();
 			for (File file : files) {
@@ -252,9 +254,40 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			for (int i=0 ; i<this.log.size() ; i++) {
 				g.drawString(this.log.get(i), 20, 200+(i*22));
 			}
+			/*if (!Statics.RELEASE_MODE) {
+				g.drawString("Num Entities: " + this.entities.size(), 400, 70);
+			}*/
+			Graphics2D g2d = (Graphics2D) g;
+			
+			// Definir a cor da linha
+			g2d.setColor(Color.GREEN);
+			
+			// Definir a espessura da linha
+			float lineWidth = 5.0f;
+			g2d.setStroke(new BasicStroke(lineWidth));
+			
+			// Calcular a coordenada vertical da linha
+			int lineY = (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS);
+			
+			// Desenhar a linha
+			g2d.drawLine(0, lineY, window.getWidth(), lineY);
 
-			g.setColor(Color.white);
-			g.drawLine(0, (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS), window.getWidth(), (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS));
+			// Configurar a fonte e cor para a mensagem
+			g2d.setColor(Color.BLACK);
+        	g2d.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Ajuste o tamanho e estilo conforme necessário
+
+			String message = "Chegue até aqui para vencer!";
+
+			// Calcular o tamanho da mensagem
+			int messageWidth = g2d.getFontMetrics().stringWidth(message);
+        	int messageHeight = g2d.getFontMetrics().getHeight();
+
+			// Calcular a posição para centralizar a mensagem
+			int x = (window.getWidth() - messageWidth) / 2;
+        	int y = lineY - messageHeight - 5;
+
+			// Desenhar a mensagem
+			g2d.drawString(message, x, y);
 
 			drawingSystem.startOfDrawing(g);
 			for (Entity e : this.entities) {
