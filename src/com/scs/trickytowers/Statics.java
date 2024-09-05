@@ -15,7 +15,7 @@ public class Statics {
     public static final int FPS = 30; // Frames por segundo
 
 	// Configurações de tela
-    public static final float STD_CELL_SIZE = 5f; // Tamanho padrão das células em unidades lógicas
+    public static final float STD_CELL_SIZE = 4f; // Tamanho padrão das células em unidades lógicas
     public static final int WINDOW_HEIGHT = 900; // Altura da janela quando não está em tela cheia
     public static final int WORLD_WIDTH_LOGICAL = 700; // Largura lógica do mundo do jogo
     public static final int WORLD_HEIGHT_LOGICAL = 200; // Altura lógica do mundo do jogo
@@ -28,14 +28,10 @@ public class Statics {
 
 	public static ImageCache img_cache;
 
-	private Statics() {
-
-	}
+	private Statics() {}
     
-
 	public static void p(String s) {
 		System.out.println(System.currentTimeMillis() + ":" + s);
 	}
-
 
 }

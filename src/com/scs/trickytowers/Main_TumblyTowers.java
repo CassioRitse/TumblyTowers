@@ -75,7 +75,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		System.setProperty("net.java.games.input.librarypath", new File("libs/jinput").getAbsolutePath());
 
-		if (Statics.RELEASE_MODE == false) {
+		if (Statics.RELEASE_MODE) {
 			// Test all sounds
 			File[] files = new File("bin/assets/sfx").listFiles();
 			for (File file : files) {
