@@ -93,7 +93,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		window = new MainWindow(this);
 
-		//try {
 		font = new Font("Showcard Gothic", Font.BOLD, 18);
 		Statics.img_cache = new ImageCache("assets/gfx/");
 
@@ -106,12 +105,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		startLevel();
 		this.gameLoop();
-
-		/*} catch (Exception ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(window, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}*/
-
 	}
 	
 	private void restartGame(){
@@ -165,10 +158,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			// Create avatars
 			for (Player player : this.players) {
 				player.currentShape = null;
-				//leftPos[i-1] = (int)((secWidth*i)-(bucketWidth/2));
-				//rightPos[i-1] = (int)((secWidth*i)+(bucketWidth/2));
-
-				// Create edges
 				/*Edge leftEdge = new Edge(this, this.getLeftBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL/2), this.getLeftBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-10));
 			this.addEntity(leftEdge);
 
@@ -263,9 +252,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			for (int i=0 ; i<this.log.size() ; i++) {
 				g.drawString(this.log.get(i), 20, 200+(i*22));
 			}
-			/*if (!Statics.RELEASE_MODE) {
-				g.drawString("Num Entities: " + this.entities.size(), 400, 70);
-			}*/
+
 			g.setColor(Color.white);
 			g.drawLine(0, (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS), window.getWidth(), (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS));
 
@@ -329,15 +316,9 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		BodyUserData ba_ud = (BodyUserData)ba.getUserData();
 		BodyUserData bb_ud = (BodyUserData)bb.getUserData();
 
-		//Statics.p("BeginContact BodyUserData A:" + ba_ud);
-		//Statics.p("BeginContact BodyUserData B:" + bb_ud);
-
 		if (ba_ud != null && bb_ud != null) {
 			Entity entityA = ba_ud.entity;
 			Entity entityB = bb_ud.entity;
-
-			//Statics.p("BeginContact Entity A:" + entityA);
-			//Statics.p("BeginContact Entity B:" + entityB);
 
 			if (entityA instanceof ICollideable) {
 				ICollideable ic = (ICollideable) entityA;
@@ -356,26 +337,21 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 	@Override
 	public void beginContact(Contact contact) {
 		this.collisions.add(contact);
-
 	}
 
 
 	@Override
 	public void endContact(Contact contact) {
-		//p("EndContact");
-
 	}
 
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-
 	}
 
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-
 	}
 
 
@@ -465,7 +441,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		//  Who uses this?!
 	}
 
 
