@@ -111,7 +111,7 @@ public final class PS4Controller implements IInputDevice {
 
 	@Override
 	public int getID() {
-		return gamepad.hashCode();//.getDeviceID();
+		return gamepad.hashCode();
 	}
 
 

@@ -78,7 +78,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		System.setProperty("net.java.games.input.librarypath", new File("libs/jinput").getAbsolutePath());
 
 		if (Statics.RELEASE_MODE) {
-			// Test all sounds
 			File[] files = new File("bin/assets/sfx").listFiles();
 			for (File file : files) {
 				this.playSound(file.getName());
@@ -171,7 +170,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 				player.vib = v;
 			}
-			// todo - play start sound
 		}
 
 		switch (currentBackgroundOption) {
