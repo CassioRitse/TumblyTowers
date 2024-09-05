@@ -1,8 +1,10 @@
 package com.scs.trickytowers;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -75,7 +77,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		System.setProperty("net.java.games.input.librarypath", new File("libs/jinput").getAbsolutePath());
 
-		if (Statics.RELEASE_MODE == false) {
+		if (Statics.RELEASE_MODE) {
 			// Test all sounds
 			File[] files = new File("bin/assets/sfx").listFiles();
 			for (File file : files) {
@@ -100,7 +102,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		drawingSystem = new DrawingSystem(this);
 
 		this.addLogEntry("Choose a game map now.");
-		this.addLogEntry("Press K and J to select the background.");
+		this.addLogEntry("Press K and L to select the background.");
 		this.addLogEntry("When you're ready, press SPACE to join!");
 
 
@@ -113,10 +115,26 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		}*/
 
 	}
-
+	
+	private void restartGame(){
+		this.players.clear();
+		this.entities.removeIf(entity -> entity instanceof VibratingPlatform);
+		this.entities.clear();
+			
+		// Redefinir variáveis de controle
+		this.keyboard1Created = false;
+		this.keyboard2Created = false;
+		this.menuStage = true; // Volta para o estado do menu se necessário
+		
+		// Reposicionar log ou mensagens iniciais
+		this.log.clear();
+		this.addLogEntry("Choose a game map now.");
+		this.addLogEntry("Press K and L to select the background.");
+		this.addLogEntry("When you're ready, press SPACE to join!");
+	}
 
 	private void startLevel() {
-		this.entities.clear();// = new TSArrayList<Entity>();
+ 		this.entities.clear();// = new TSArrayList<Entity>();
 
 		Vec2 gravity = new Vec2(0f, 9.81f);
 		world = new World(gravity);
@@ -158,8 +176,8 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 			Edge rightEdge = new Edge(this, this.getRightBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-10), this.getRightBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL/2));
 			this.addEntity(rightEdge);*/
-
-				VibratingPlatform v = new VibratingPlatform(this, this.getCentreBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-15), bucketWidth*0.5f);
+				player.id_ZB = 0;
+				VibratingPlatform v = new VibratingPlatform(this, this.getCentreBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-20), bucketWidth*0.9f);
 				this.addEntity(v);
 
 				player.vib = v;
@@ -214,7 +232,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 			if (restartLevel && this.restartOn < System.currentTimeMillis()) {
 				restartLevel = false;
-				this.startLevel();
+ 				this.startLevel();
 			}
 
 			this.entities.refresh();
@@ -250,8 +268,37 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			/*if (!Statics.RELEASE_MODE) {
 				g.drawString("Num Entities: " + this.entities.size(), 400, 70);
 			}*/
-			g.setColor(Color.white);
-			g.drawLine(0, (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS), window.getWidth(), (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS));
+			Graphics2D g2d = (Graphics2D) g;
+			
+			// Definir a cor da linha
+			g2d.setColor(Color.GREEN);
+			
+			// Definir a espessura da linha
+			float lineWidth = 5.0f;
+			g2d.setStroke(new BasicStroke(lineWidth));
+			
+			// Calcular a coordenada vertical da linha
+			int lineY = (int)(Statics.LOGICAL_WINNING_HEIGHT * Statics.LOGICAL_TO_PIXELS);
+			
+			// Desenhar a linha
+			g2d.drawLine(0, lineY, window.getWidth(), lineY);
+
+			// Configurar a fonte e cor para a mensagem
+			g2d.setColor(Color.BLACK);
+        	g2d.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Ajuste o tamanho e estilo conforme necessário
+
+			String message = "Chegue até aqui para vencer!";
+
+			// Calcular o tamanho da mensagem
+			int messageWidth = g2d.getFontMetrics().stringWidth(message);
+        	int messageHeight = g2d.getFontMetrics().getHeight();
+
+			// Calcular a posição para centralizar a mensagem
+			int x = (window.getWidth() - messageWidth) / 2;
+        	int y = lineY - messageHeight - 5;
+
+			// Desenhar a mensagem
+			g2d.drawString(message, x, y);
 
 			drawingSystem.startOfDrawing(g);
 			for (Entity e : this.entities) {
@@ -442,6 +489,8 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 				this.restartOn = 0;
 			}
 			
+		}else if(ke.getKeyCode() == KeyEvent.VK_O){
+			restartGame();
 		}
 	}
 
