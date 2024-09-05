@@ -15,6 +15,4 @@ public class Rectangle extends AbstractShape {
 		BodyUserData bud = new BodyUserData("Rectangle", AbstractShape.getRandomColour(), this);
 		body = JBox2DFunctions.AddRectangle(bud, main.world, sx, Statics.LOGICAL_WINNING_HEIGHT/2, width, height, BodyType.DYNAMIC, RESTITUTION, FRICTION, WEIGHT);
 	}
-
-	
 }

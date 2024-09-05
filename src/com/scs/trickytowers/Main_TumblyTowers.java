@@ -432,43 +432,70 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent ke) {
-		if (ke.getKeyCode() == KeyEvent.VK_CONTROL) {
-			this.createKeyboard1 = true;
-			this.menuStage = false;
-		} else if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-			this.createKeyboard2 = true;
-			this.menuStage = false;
-		} else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
-		} else if (ke.getKeyCode() == KeyEvent.VK_R) {
-			this.restartLevel = true;
-			this.restartOn = 0;
-		}else if (ke.getKeyCode() == KeyEvent.VK_K){
-			if(this.menuStage == true){
-				if(this.currentBackgroundOption == 0){
-					this.currentBackgroundOption= 2;
-					
-				}else{
-					this.currentBackgroundOption -=1;
+		switch (ke.getKeyCode()) {
+			case KeyEvent.VK_CONTROL:
+				this.createKeyboard1 = true;
+				this.menuStage = false;
+				break;
+				
+			case KeyEvent.VK_SPACE:
+				this.createKeyboard2 = true;
+				this.menuStage = false;
+				break;
+				
+			case KeyEvent.VK_ESCAPE:
+				exitApplication();
+				break;
+				
+			case KeyEvent.VK_R:
+				restartLevelAndOn();
+				break;
+				
+			case KeyEvent.VK_K:
+				if (this.menuStage) {
+					previousBackgroundOption();
+					restartLevelAndOn();
 				}
-	
-				this.restartLevel = true;
-				this.restartOn = 0;
-			}
-		}else if (ke.getKeyCode() == KeyEvent.VK_L){
-			if(this.menuStage == true){
-				if(this.currentBackgroundOption == 2){
-					this.currentBackgroundOption = 0;
-				}else{
-					this.currentBackgroundOption +=1;
-	
+				break;
+				
+			case KeyEvent.VK_L:
+				if (this.menuStage) {
+					nextBackgroundOption();
+					restartLevelAndOn();
 				}
-				this.restartLevel = true;
-				this.restartOn = 0;
-			}
-			
-		}else if(ke.getKeyCode() == KeyEvent.VK_O){
-			restartGame();
+				break;
+				
+			case KeyEvent.VK_O:
+				restartGame();
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	private void restartLevelAndOn() {
+		this.restartLevel = true;
+		this.restartOn = 0;
+	}
+	
+	private void exitApplication() {
+		System.exit(0);
+	}
+	
+	private void previousBackgroundOption() {
+		if (this.currentBackgroundOption == 0) {
+			this.currentBackgroundOption = 2;
+		} else {
+			this.currentBackgroundOption -= 1;
+		}
+	}
+	
+	private void nextBackgroundOption() {
+		if (this.currentBackgroundOption == 2) {
+			this.currentBackgroundOption = 0;
+		} else {
+			this.currentBackgroundOption += 1;
 		}
 	}
 
@@ -478,7 +505,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 
 	public void playerWon(Player player) {
-		if (restartLevel) { // Already got a winner
+		if (restartLevel) { 
 			return;
 		}
 		
@@ -487,7 +514,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		this.restartLevel = true;
 		this.restartOn = System.currentTimeMillis() + 4000;
 
-		// Remove other player's vibrating platforms
 		synchronized (players) {
 			for (Player p : this.players) {
 				if (player != p) {

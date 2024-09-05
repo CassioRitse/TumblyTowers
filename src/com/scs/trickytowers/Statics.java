@@ -21,7 +21,7 @@ public class Statics {
     public static final int WORLD_HEIGHT_LOGICAL = 200; // Altura lógica do mundo do jogo
     public static final float LOGICAL_WINNING_HEIGHT = WORLD_HEIGHT_LOGICAL * 0.2f; // Altura lógica para vitória
 
-     // Conversão de unidades lógicas para pixels
+	// Conversão de unidades lógicas para pixels
 	public static float LOGICAL_TO_PIXELS;
 	
 	public static final Random rnd = new Random();
