@@ -1,5 +1,7 @@
 package com.scs.trickytowers;
 
+import org.jbox2d.common.Vec2;
+
 import com.scs.trickytowers.entity.VibratingPlatform;
 import com.scs.trickytowers.entity.shapes.AbstractShape;
 import com.scs.trickytowers.entity.shapes.Rectangle;
