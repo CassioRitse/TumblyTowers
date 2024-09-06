@@ -12,10 +12,8 @@ public class Edge extends PhysicalEntity {
 
 	public Edge(Main_TumblyTowers _main, float sx, float sy, float ex, float ey) {
 		super(_main, "Edge");
-		
 		BodyUserData bud = new BodyUserData("Edge", Color.black, this);
 		body = JBox2DFunctions.AddEdgeShapeByTL(main.world, bud, sx, sy, ex, ey, BodyType.STATIC, 0, 1, 1);
-
 	}
 
 }

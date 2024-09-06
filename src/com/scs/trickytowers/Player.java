@@ -6,6 +6,7 @@ import com.scs.trickytowers.entity.VibratingPlatform;
 import com.scs.trickytowers.entity.shapes.AbstractShape;
 import com.scs.trickytowers.entity.shapes.Rectangle;
 import com.scs.trickytowers.input.IInputDevice;
+
 import ssmith.lang.Functions;
 
 public class Player {
@@ -21,7 +22,6 @@ public class Player {
 
 	public Player(Main_TumblyTowers _main, IInputDevice _input) {
 		super();
-
 		id_ZB = nextId++;
 		main = _main;
 		input = _input;
@@ -30,13 +30,9 @@ public class Player {
 
 	public void process() {
 		input.readEvents();
-		
-		if (currentShape != null && currentShape.body != null) { // body is null if shape dropped off the bottom
-			//if (player.currentShape.body.getLinearVelocity().length() <= 0) {//.isActive()) {//player.currentShape.body.getWorldCenter().y > player.prevY) { // Still moving
-			//if (currentShape.body.getWorldCenter().y < Statics.WIN_HEIGHT || Math.abs(currentShape.body.getWorldCenter().y - prevShapeY) > 0.1f) { // Still moving
+		if (currentShape != null && currentShape.body != null) { 
 			float diff = Math.abs(currentShape.body.getWorldCenter().y - prevShapeY);
-			//Statics.p("Diff=" + diff);
-			if (currentShape.body.getWorldCenter().y < 1 || diff > 0.01f) { // Still moving
+			if (currentShape.body.getWorldCenter().y < 1 || diff > 0.01f) {
 				currentShape.applyDrag(!this.input.isFirePressed());
 				prevShapeY = currentShape.body.getWorldCenter().y;
 				if (currentShape.collided == false) {
@@ -53,15 +49,15 @@ public class Player {
 						}
 						input.clearInputs();
 					} else if (input.isSpinLeftPressed()) {
-						newAngle -= Math.PI/8;//12;// 0.1f;
+						newAngle -= Math.PI/8;
 						input.clearInputs();
 					} else if (input.isSpinRightPressed()) {
-						newAngle += Math.PI/8;//12;// 0.1f;
+						newAngle += Math.PI/8;
 						input.clearInputs();
 					}
 					currentShape.body.setTransform(newPos, newAngle);
 				}
-			} else { // Stopped moving
+			} else {
 				if (currentShape.getPosition().y < Statics.LOGICAL_WINNING_HEIGHT) {
 					main.playerWon(this);
 				}
@@ -69,12 +65,9 @@ public class Player {
 				currentShape = null;
 			}
 		} else {
-			// Drop new shape
-			//Statics.p("Dropping new Shape");
 			currentShape = getRandomShape(main.getShapeStartPosX(id_ZB));
 			main.addEntity(currentShape);
 			main.playSound("shapedropped.ogg");
-
 		}
 	}
 	

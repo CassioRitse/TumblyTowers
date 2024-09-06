@@ -39,7 +39,6 @@ public class DrawingSystem {
 		// Default to centre
 		cam_centre_logical.x = Statics.WORLD_WIDTH_LOGICAL/2;
 		cam_centre_logical.y = Statics.WORLD_HEIGHT_LOGICAL/2;
-
 	}
 
 
@@ -116,34 +115,11 @@ public class DrawingSystem {
 				Vec2 worldpos = b.getWorldPoint(prev);
 				Point p = new Point();
 				getPixelPos(p, worldpos);
-
-				//int x1 = (int)((worldpos.x-cam_centre.x)*Statics.WORLD_TO_PIXELS);
-				//int y1 = (int)((worldpos.y-cam_centre.y)*Statics.WORLD_TO_PIXELS);
-
 				worldpos = b.getWorldPoint(v);
-				//int x2 = (int)((worldpos.x-cam_centre.x)*Statics.WORLD_TO_PIXELS);
-				//int y2 = (int)((worldpos.y-cam_centre.y)*Statics.WORLD_TO_PIXELS);
 				getPixelPos(tmp, worldpos);
 
 				g.setColor(col);
 				g.drawLine(p.x, p.y, tmp.x, tmp.y);
-
-				/*} else if (f.getShape() instanceof ChainShape) {
-			ChainShape shape2 = (ChainShape)f.getShape();
-			EdgeShape shape = new EdgeShape();
-			for (int i=0 ; i<shape2.getChildCount() ; i++) {
-				shape2.getChildEdge(shape, i);
-
-				Vec2 worldpos = b.getWorldPoint(shape.m_vertex1);
-				int x1 = (int)((worldpos.x-cam_centre.x)*Statics.WORLD_TO_PIXELS);
-				int y1 = (int)((worldpos.y-cam_centre.y)*Statics.WORLD_TO_PIXELS);
-
-				worldpos = b.getWorldPoint(shape.m_vertex2);
-				int x2 = (int)((worldpos.x-cam_centre.x)*Statics.WORLD_TO_PIXELS);
-				int y2 = (int)((worldpos.y-cam_centre.y)*Statics.WORLD_TO_PIXELS);
-
-				g.drawLine(x1, y1, x2, y2);
-			}*/
 
 			} else if (f.getShape() instanceof CircleShape) {
 				CircleShape shape2 = (CircleShape)f.getShape();
@@ -198,30 +174,5 @@ public class DrawingSystem {
 			y += metrics.getHeight() + lineSpacing; // Move para a próxima linha
 		}
 	}
-	
 
-	/*
-	private void DrawParticles(Graphics g, World world, Vec2 cam_centre) {
-		int particleCount = world.getParticleCount();// system.getParticleCount();
-		if (particleCount != 0) {
-			float particleRadius = world.getParticleRadius();
-			Vec2[] positionBuffer = world.getParticlePositionBuffer();// system.getParticlePositionBuffer();
-			//ParticleColor[] colorBuffer = null;
-			drawParticles(g, positionBuffer, particleRadius, particleCount, cam_centre);
-		}
-
-	}
-
-	private static void drawParticles(Graphics g, Vec2[] centers, float radius, int count, Vec2 cam_centre) {
-		for (int i = 0; i < count; i++) {
-			Vec2 center = centers[i];
-			int draw_rad = (int)(radius*23f);
-			g.setColor(Color.blue);
-			int x = (int)(((center.x-cam_centre.x)-radius)*Statics.WORLD_TO_PIXELS);
-			int y = (int)(((center.y-cam_centre.y)-radius)*Statics.WORLD_TO_PIXELS);
-			g.fillOval(x, y, draw_rad, draw_rad);
-
-		}
-	}
-	 */
 }

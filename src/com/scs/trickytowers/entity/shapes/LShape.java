@@ -24,5 +24,4 @@ public class LShape extends AbstractShape {
 		body = JBox2DFunctions.CreateComplexShape(bud, main.world, verts, BodyType.DYNAMIC, RESTITUTION, FRICTION, WEIGHT);
 	}
 
-	
 }

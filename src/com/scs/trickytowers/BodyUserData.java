@@ -12,7 +12,6 @@ public class BodyUserData { // For attaching to bodies
 	
 	public BodyUserData(String _name, Color c, Entity e) {
 		super();
-		
 		name = _name;
 		col = c;
 		entity = e;

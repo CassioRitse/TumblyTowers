@@ -78,7 +78,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		System.setProperty("net.java.games.input.librarypath", new File("libs/jinput").getAbsolutePath());
 
 		if (Statics.RELEASE_MODE) {
-			// Test all sounds
 			File[] files = new File("bin/assets/sfx").listFiles();
 			for (File file : files) {
 				this.playSound(file.getName());
@@ -95,7 +94,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		window = new MainWindow(this);
 
-		//try {
 		font = new Font("Showcard Gothic", Font.BOLD, 18);
 		Statics.img_cache = new ImageCache("assets/gfx/");
 
@@ -108,12 +106,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 		startLevel();
 		this.gameLoop();
-
-		/*} catch (Exception ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(window, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}*/
-
 	}
 	
 	private void restartGame(){
@@ -167,10 +159,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			// Create avatars
 			for (Player player : this.players) {
 				player.currentShape = null;
-				//leftPos[i-1] = (int)((secWidth*i)-(bucketWidth/2));
-				//rightPos[i-1] = (int)((secWidth*i)+(bucketWidth/2));
-
-				// Create edges
 				/*Edge leftEdge = new Edge(this, this.getLeftBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL/2), this.getLeftBucketPos(player.id_ZB), (float)(Statics.WORLD_HEIGHT_LOGICAL-10));
 			this.addEntity(leftEdge);
 
@@ -182,7 +170,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 				player.vib = v;
 			}
-			// todo - play start sound
 		}
 
 		switch (currentBackgroundOption) {
@@ -360,15 +347,9 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		BodyUserData ba_ud = (BodyUserData)ba.getUserData();
 		BodyUserData bb_ud = (BodyUserData)bb.getUserData();
 
-		//Statics.p("BeginContact BodyUserData A:" + ba_ud);
-		//Statics.p("BeginContact BodyUserData B:" + bb_ud);
-
 		if (ba_ud != null && bb_ud != null) {
 			Entity entityA = ba_ud.entity;
 			Entity entityB = bb_ud.entity;
-
-			//Statics.p("BeginContact Entity A:" + entityA);
-			//Statics.p("BeginContact Entity B:" + entityB);
 
 			if (entityA instanceof ICollideable) {
 				ICollideable ic = (ICollideable) entityA;
@@ -387,26 +368,21 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 	@Override
 	public void beginContact(Contact contact) {
 		this.collisions.add(contact);
-
 	}
 
 
 	@Override
 	public void endContact(Contact contact) {
-		//p("EndContact");
-
 	}
 
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-
 	}
 
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-
 	}
 
 
@@ -454,54 +430,80 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent ke) {
-		if (ke.getKeyCode() == KeyEvent.VK_CONTROL) {
-			this.createKeyboard1 = true;
-			this.menuStage = false;
-		} else if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-			this.createKeyboard2 = true;
-			this.menuStage = false;
-		} else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
-		} else if (ke.getKeyCode() == KeyEvent.VK_R) {
-			this.restartLevel = true;
-			this.restartOn = 0;
-		}else if (ke.getKeyCode() == KeyEvent.VK_K){
-			if(this.menuStage == true){
-				if(this.currentBackgroundOption == 0){
-					this.currentBackgroundOption= 2;
-					
-				}else{
-					this.currentBackgroundOption -=1;
+		switch (ke.getKeyCode()) {
+			case KeyEvent.VK_CONTROL:
+				this.createKeyboard1 = true;
+				this.menuStage = false;
+				break;
+				
+			case KeyEvent.VK_SPACE:
+				this.createKeyboard2 = true;
+				this.menuStage = false;
+				break;
+				
+			case KeyEvent.VK_ESCAPE:
+				exitApplication();
+				break;
+				
+			case KeyEvent.VK_R:
+				restartLevelAndOn();
+				break;
+				
+			case KeyEvent.VK_K:
+				if (this.menuStage) {
+					previousBackgroundOption();
+					restartLevelAndOn();
 				}
-	
-				this.restartLevel = true;
-				this.restartOn = 0;
-			}
-		}else if (ke.getKeyCode() == KeyEvent.VK_L){
-			if(this.menuStage == true){
-				if(this.currentBackgroundOption == 2){
-					this.currentBackgroundOption = 0;
-				}else{
-					this.currentBackgroundOption +=1;
-	
+				break;
+				
+			case KeyEvent.VK_L:
+				if (this.menuStage) {
+					nextBackgroundOption();
+					restartLevelAndOn();
 				}
-				this.restartLevel = true;
-				this.restartOn = 0;
-			}
-			
-		}else if(ke.getKeyCode() == KeyEvent.VK_O){
-			restartGame();
+				break;
+				
+			case KeyEvent.VK_O:
+				restartGame();
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	private void restartLevelAndOn() {
+		this.restartLevel = true;
+		this.restartOn = 0;
+	}
+	
+	private void exitApplication() {
+		System.exit(0);
+	}
+	
+	private void previousBackgroundOption() {
+		if (this.currentBackgroundOption == 0) {
+			this.currentBackgroundOption = 2;
+		} else {
+			this.currentBackgroundOption -= 1;
+		}
+	}
+	
+	private void nextBackgroundOption() {
+		if (this.currentBackgroundOption == 2) {
+			this.currentBackgroundOption = 0;
+		} else {
+			this.currentBackgroundOption += 1;
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		//  Who uses this?!
 	}
 
 
 	public void playerWon(Player player) {
-		if (restartLevel) { // Already got a winner
+		if (restartLevel) { 
 			return;
 		}
 		
@@ -510,7 +512,6 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		this.restartLevel = true;
 		this.restartOn = System.currentTimeMillis() + 4000;
 
-		// Remove other player's vibrating platforms
 		synchronized (players) {
 			for (Player p : this.players) {
 				if (player != p) {

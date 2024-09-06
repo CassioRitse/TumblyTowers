@@ -40,12 +40,10 @@ public final class PS4Controller implements IInputDevice {
 			this.lastEventTime = event.getNanos();
 
 			float value = event.getValue();
-			//if (value == 0 || value < -0.5 || value > 0.5) {
 			Component comp = event.getComponent();
 			if (comp.isAnalog() == false) { // Only interested in digital events
 				if (comp.getIdentifier() == Identifier.Axis.POV) { // d-pad
 					this.leftPressed = value >= 1f;
-					//} else if (comp.getIdentifier() == Identifier.Button.RIGHT) {
 					this.rightPressed = value == 0.5f;
 				} else if (comp.getIdentifier() == Identifier.Button._4) { // l1
 					this.spinLeftPressed = value > 0.5f;
@@ -113,7 +111,7 @@ public final class PS4Controller implements IInputDevice {
 
 	@Override
 	public int getID() {
-		return gamepad.hashCode();//.getDeviceID();
+		return gamepad.hashCode();
 	}
 
 
