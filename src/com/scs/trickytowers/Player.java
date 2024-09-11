@@ -11,69 +11,87 @@ import ssmith.lang.Functions;
 
 public class Player {
 
-	public int score, id_ZB;
-	public IInputDevice input;
-	public AbstractShape currentShape;
-	public float prevShapeY;
-	private Main_TumblyTowers main;
-	public VibratingPlatform vib;
-	
-	private static int nextId = 0;
+    public int score, id_ZB;
+    public IInputDevice input;
+    public AbstractShape currentShape;
+    public float prevShapeY;
+    private Main_TumblyTowers main;
+    public VibratingPlatform vib;
+    
+    private static int nextId = 0;
 
 	public Player(Main_TumblyTowers _main, IInputDevice _input) {
-		super();
-		id_ZB = nextId++;
-		main = _main;
-		input = _input;
-	}
+        super();
+        id_ZB = nextId++;
+        main = _main;
+        input = _input;
+    }
 
 
-	public void process() {
-		input.readEvents();
-		if (currentShape != null && currentShape.body != null) { 
-			float diff = Math.abs(currentShape.body.getWorldCenter().y - prevShapeY);
-			if (currentShape.body.getWorldCenter().y < 1 || diff > 0.01f) {
-				currentShape.applyDrag(!this.input.isFirePressed());
-				prevShapeY = currentShape.body.getWorldCenter().y;
-				if (currentShape.collided == false) {
-					Vec2 newPos = new Vec2(currentShape.body.getWorldCenter());
-					float newAngle = currentShape.body.getAngle();
-					if (input.isLeftPressed()) {
-						if (currentShape.body.getWorldCenter().x > main.getLeftBucketPos(id_ZB)) {
-							newPos.x -= Statics.STD_CELL_SIZE/2;
-						}
-						input.clearInputs();
-					} else if (input.isRightPressed()) {
-						if (currentShape.body.getWorldCenter().x < main.getRightBucketPos(id_ZB)) {
-							newPos.x += Statics.STD_CELL_SIZE/2;
-						}
-						input.clearInputs();
-					} else if (input.isSpinLeftPressed()) {
-						newAngle -= Math.PI/8;
-						input.clearInputs();
-					} else if (input.isSpinRightPressed()) {
-						newAngle += Math.PI/8;
-						input.clearInputs();
-					}
-					currentShape.body.setTransform(newPos, newAngle);
-				}
-			} else {
-				if (currentShape.getPosition().y < Statics.LOGICAL_WINNING_HEIGHT) {
-					main.playerWon(this);
-				}
-				Statics.p("Shape removed");
-				currentShape = null;
-			}
-		} else {
-			currentShape = getRandomShape(main.getShapeStartPosX(id_ZB));
-			main.addEntity(currentShape);
-			main.playSound("shapedropped.ogg");
-		}
-	}
-	
-	private AbstractShape getRandomShape(float x) {
-		int width = Functions.rnd(1, 4);
-		int height = Functions.rnd(1, 4);
-		return new Rectangle(main, Statics.STD_CELL_SIZE * width, Statics.STD_CELL_SIZE * height, x);
-	}
+    public void process() {
+        input.readEvents();
+
+        boolean hasValidShape = currentShape != null && currentShape.body != null;
+        if (hasValidShape) { 
+            float currentShapeYPosition = currentShape.body.getWorldCenter().y;
+            float positionDifference = Math.abs(currentShapeYPosition - prevShapeY);
+            
+            boolean isShapeTooLow = currentShapeYPosition < 1;
+            boolean isShapeMovingSignificantly = positionDifference > 0.01f;
+
+            if (isShapeTooLow || isShapeMovingSignificantly) {
+                boolean isFirePressed = this.input.isFirePressed();
+                currentShape.applyDrag(!isFirePressed);
+                prevShapeY = currentShapeYPosition;
+                
+                boolean hasShapeNotCollided = !currentShape.collided;
+                if (hasShapeNotCollided) {
+                    Vec2 newPos = new Vec2(currentShape.body.getWorldCenter());
+                    float newAngle = currentShape.body.getAngle();
+
+                    boolean isLeftPressed = input.isLeftPressed();
+                    boolean isRightPressed = input.isRightPressed();
+                    boolean isSpinLeftPressed = input.isSpinLeftPressed();
+                    boolean isSpinRightPressed = input.isSpinRightPressed();
+                    
+                    boolean canMoveLeft = isLeftPressed && currentShape.body.getWorldCenter().x > main.getLeftBucketPos(id_ZB);
+                    boolean canMoveRight = isRightPressed && currentShape.body.getWorldCenter().x < main.getRightBucketPos(id_ZB);
+                    
+                    if (canMoveLeft) {
+                        newPos.x -= Statics.STD_CELL_SIZE / 2;
+                        input.clearInputs();
+                    } else if (canMoveRight) {
+                        newPos.x += Statics.STD_CELL_SIZE / 2;
+                        input.clearInputs();
+                    } else if (isSpinLeftPressed) {
+                        newAngle -= Math.PI / 8;
+                        input.clearInputs();
+                    } else if (isSpinRightPressed) {
+                        newAngle += Math.PI / 8;
+                        input.clearInputs();
+                    }
+
+                    currentShape.body.setTransform(newPos, newAngle);
+                }
+            } else {
+                boolean isBelowWinningHeight = currentShape.getPosition().y < Statics.LOGICAL_WINNING_HEIGHT;
+                if (isBelowWinningHeight) {
+                    main.playerWon(this);
+                }
+                Statics.p("Shape removed");
+                currentShape = null;
+            }
+        } else {
+            float startXPosition = main.getShapeStartPosX(id_ZB);
+            currentShape = getRandomShape(startXPosition);
+            main.addEntity(currentShape);
+            main.playSound("shapedropped.ogg");
+        }
+    }
+    
+    private AbstractShape getRandomShape(float x) {
+        int width = Functions.rnd(1, 4);
+        int height = Functions.rnd(1, 4);
+        return new Rectangle(main, Statics.STD_CELL_SIZE * width, Statics.STD_CELL_SIZE * height, x);
+    }
 }
