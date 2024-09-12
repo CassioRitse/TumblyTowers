@@ -195,7 +195,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 	private void gameLoop() {
 		final long interpolMillis = 1000/Statics.FPS;
 		final float timeStepSecs = 1.0f / Statics.FPS;//10.f;
-		final int velocityIterations = 6;//8;//6;
+		final int velocityIterations = 2;//8;//6;
 		final int positionIterations = 4;//3;//2;
 
 		while (window.isVisible()) {
