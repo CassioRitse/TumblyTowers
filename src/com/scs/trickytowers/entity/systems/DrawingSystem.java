@@ -143,35 +143,46 @@ public class DrawingSystem {
 		}
 	}
 
-	public void paintFixedMenu(java.awt.Graphics g, MainWindow m, float volume) {
+	public void paintFixedMenu(java.awt.Graphics g, MainWindow m, float volume, boolean menuStage) {
 		Font fontMenu = new Font("Showcard Gothic", Font.PLAIN, 12);
-		g.setFont(fontMenu);
-		g.setColor(Color.black);
-	
-		// Definindo o texto do menu de comandos
-		String[] menuLines = {
-			"[R] - Restart  [K - L] - Change Background  |  [W, A, S, D, SPACE] - Player 1  |  [Arrow Keys, Ctrl] - Player 2",
-			"[ESQ] - EXIT"
-		};
-	
-		int lineSpacing = 5;
-	
-		// Tamanho da Tela
-		int screenWidth = m.getWidth();
-	
-		// Desenha o menu de comandos no topo da tela
-		FontMetrics metrics = g.getFontMetrics(fontMenu);
-		int y = metrics.getHeight() + 50; // Alinhado no topo com margem de 10 pixels
-	
-		for (String line : menuLines) {
-			// Calcula a largura do texto para centralizar
-			int textWidth = metrics.stringWidth(line);
-			int x = (screenWidth - textWidth) / 2; // Centraliza horizontalmente
-	
-			// Desenha a linha do menu de comandos
-			g.drawString(line, x, y);
-			y += metrics.getHeight() + lineSpacing; // Move para a próxima linha
-		}
+    	g.setFont(fontMenu);
+    	g.setColor(Color.WHITE);
+
+    	// Definindo o texto do menu por padrão
+    	String[] menuLines = {
+       		"[O] - Return to Menu  | [R] - Restart Level  ",
+        	"[ESQ] - EXIT"
+    	};
+
+    	// Se 'menuStage' for true, redefinir o menuLines com opções diferentes
+    	if (menuStage) {
+        	menuLines = new String[] {
+            	"[K - L] - Change Background  |  [W, A, S, D, SPACE] - Player 1  |  [Arrow Keys, Ctrl] - Player 2",
+            	"[ESQ] - EXIT"
+        	};
+    	}
+		
+
+    	int lineSpacing = 1;
+
+    	// Tamanho da Tela
+    	int screenWidth = m.getWidth();
+    	int screenHeight = m.getHeight();
+
+    	// Desenha cada linha do menu
+    	FontMetrics metrics = g.getFontMetrics(fontMenu);
+    	int y = screenHeight - metrics.getHeight() - 10; // Alinhado no final da tela com margem de 50 pixels da borda
+
+		
+    	for (String line : menuLines) {
+        	// Calcula a largura do texto para centralizar
+        	int textWidth = metrics.stringWidth(line);
+        	int x = (screenWidth - textWidth) / 2; // Centraliza horizontalmente
+
+        	// Desenha a linha do menu
+        	g.drawString(line, x, y);
+        	y += metrics.getHeight() + lineSpacing; // Move para a próxima linha
+    	}
 	
 		// Desenhar a barra de volume
 		drawVolumeBar(g, m, volume); // Chama a função para desenhar a barra de volume

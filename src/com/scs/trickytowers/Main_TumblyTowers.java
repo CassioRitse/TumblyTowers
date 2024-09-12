@@ -304,7 +304,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 				}
 			}
 			drawingSystem.endOfDrawing();
-			drawingSystem.paintFixedMenu(g,window, this.interfaceVolume);
+			drawingSystem.paintFixedMenu(g,window, this.interfaceVolume, this.menuStage);
 			window.BS.show();
 
 			long diff = System.currentTimeMillis() - start;
@@ -452,6 +452,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 				
 			case KeyEvent.VK_R:
 				restartLevelAndOn();
+				Graphics g = window.BS.getDrawGraphics();
 				break;
 				
 			case KeyEvent.VK_K:
@@ -580,7 +581,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
     	}
 
     	Graphics g = window.BS.getDrawGraphics();
-    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume);
+    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume, this.menuStage);
 	}
 
 
@@ -590,7 +591,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
     	}
 
     	Graphics g = window.BS.getDrawGraphics();
-    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume);
+    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume, this.menuStage);
 	}
 	
 
