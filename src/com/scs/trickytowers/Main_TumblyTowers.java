@@ -538,7 +538,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 
 	private void addLogEntry(String s) {
 		this.log.add(s);
-		while (this.log.size() > 5) {
+		while (this.log.size() > 1) {
 			this.log.remove(0);
 		}
 	}
