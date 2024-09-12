@@ -59,6 +59,11 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 	private int[] leftPos;
 	private int[] rightPos;
 	private Font font;
+	// Define o intervalo de volume real de -80.0f a 6.0f
+	private final float MIN_VOLUME = -80.0f;
+	private final float MAX_VOLUME = 6.0f;
+	// Volume entre 0 e 5 para interface (escala da barra)
+	private float interfaceVolume = 5.0f; // Começa em 100%
 	private long lastCollisionTime = 0;
 	private int currentBackgroundOption = Statics.rnd.nextInt(3);
 
@@ -299,7 +304,7 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 				}
 			}
 			drawingSystem.endOfDrawing();
-			drawingSystem.paintFixedMenu(g,window);
+			drawingSystem.paintFixedMenu(g,window, this.interfaceVolume);
 			window.BS.show();
 
 			long diff = System.currentTimeMillis() - start;
@@ -466,6 +471,14 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 			case KeyEvent.VK_O:
 				restartGame();
 				break;
+
+			case KeyEvent.VK_EQUALS:
+				upVolume();
+			break;
+
+			case KeyEvent.VK_MINUS:
+				downVolume();
+			break;
 				
 			default:
 				break;
@@ -557,9 +570,33 @@ public class Main_TumblyTowers implements ContactListener, KeyListener {
 		}
 	}
 
+	private float mapInterfaceToRealVolume(float interfaceVolume) {
+		return MIN_VOLUME + ((interfaceVolume / 5.0f) * (MAX_VOLUME - MIN_VOLUME));
+	}
+
+	public void upVolume() {
+    	if (this.interfaceVolume < 5.0f) {  // Incrementa na escala de interface
+        	this.interfaceVolume += 1.0f;
+    	}
+
+    	Graphics g = window.BS.getDrawGraphics();
+    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume);
+	}
+
+
+	public void downVolume() {
+    	if (this.interfaceVolume > 0.0f) {  // Decrementa na escala de interface
+       		this.interfaceVolume -= 1.0f;
+    	}
+
+    	Graphics g = window.BS.getDrawGraphics();
+    	this.drawingSystem.paintFixedMenu(g, window, this.interfaceVolume);
+	}
+	
 
 	public void playSound(String filename) {
-		new AudioPlayer("assets/sfx/" + filename, false).start();
+    	float realVolume = mapInterfaceToRealVolume(this.interfaceVolume);
+    	new AudioPlayer("assets/sfx/" + filename, false, realVolume).start();
 	}
 
 }

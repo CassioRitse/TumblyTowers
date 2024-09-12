@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.SourceDataLine;
 
 public class AudioPlayer extends Thread {
@@ -16,13 +17,15 @@ public class AudioPlayer extends Thread {
 	public volatile boolean paused = false;
 	private boolean loop;
 	private ClassLoader cl = this.getClass().getClassLoader();
+	private SourceDataLine line; // Armazena a linha de áudio para controle de volume
+	private float volume; // Novo campo para controlar o volume
 
-	public AudioPlayer(String fname, boolean _loop) {
+	public AudioPlayer(String fname, boolean _loop, float volume) {
 		super(AudioPlayer.class.getSimpleName() + "_" + fname);
 
 		loop = _loop;
 		this.filename = fname;
-
+		this.volume = volume; // Define o volume inicial
 		this.setDaemon(true);
 	}
 
@@ -41,9 +44,10 @@ public class AudioPlayer extends Thread {
 						false);
 				din = AudioSystem.getAudioInputStream(decodedFormat, in);
 				DataLine.Info info = new DataLine.Info(SourceDataLine.class, decodedFormat);
-				SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+				line = (SourceDataLine) AudioSystem.getLine(info);
 				if (line != null) {
 					line.open(decodedFormat);
+					setVolume(volume); // Aplica o volume antes de iniciar
 					byte[] data = new byte[4096];
 					// Start
 					line.start();
@@ -79,6 +83,13 @@ public class AudioPlayer extends Thread {
 		}
 	}
 
+	// Método para ajustar o volume
+	public void setVolume(float value) {
+		if (line != null && line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+			FloatControl volumeControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
+			volumeControl.setValue(value); // O valor varia de min a max em dB
+		}
+	}
 
 	public void stopNow() {
 		this.stop_now = true;

@@ -143,12 +143,12 @@ public class DrawingSystem {
 		}
 	}
 
-	public void paintFixedMenu(java.awt.Graphics g, MainWindow m) {
+	public void paintFixedMenu(java.awt.Graphics g, MainWindow m, float volume) {
 		Font fontMenu = new Font("Showcard Gothic", Font.PLAIN, 12);
 		g.setFont(fontMenu);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.black);
 	
-		// Definindo o texto do menu
+		// Definindo o texto do menu de comandos
 		String[] menuLines = {
 			"[R] - Restart  [K - L] - Change Background  |  [W, A, S, D, SPACE] - Player 1  |  [Arrow Keys, Ctrl] - Player 2",
 			"[ESQ] - EXIT"
@@ -158,21 +158,66 @@ public class DrawingSystem {
 	
 		// Tamanho da Tela
 		int screenWidth = m.getWidth();
-		int screenHeight = m.getHeight();
 	
-		// Desenha cada linha do menu
+		// Desenha o menu de comandos no topo da tela
 		FontMetrics metrics = g.getFontMetrics(fontMenu);
-		int y = screenHeight - metrics.getHeight() - 10; // Alinhado no final da tela com margem de 10 pixels da borda
+		int y = metrics.getHeight() + 50; // Alinhado no topo com margem de 10 pixels
 	
 		for (String line : menuLines) {
 			// Calcula a largura do texto para centralizar
 			int textWidth = metrics.stringWidth(line);
 			int x = (screenWidth - textWidth) / 2; // Centraliza horizontalmente
 	
-			// Desenha a linha do menu
+			// Desenha a linha do menu de comandos
 			g.drawString(line, x, y);
 			y += metrics.getHeight() + lineSpacing; // Move para a próxima linha
 		}
+	
+		// Desenhar a barra de volume
+		drawVolumeBar(g, m, volume); // Chama a função para desenhar a barra de volume
 	}
+	
+	// Função para desenhar a barra de volume
+	public void drawVolumeBar(Graphics g, MainWindow m, float volume) {
+		int maxVolume = 5; // Volume máximo, ou seja, 5 barras
+		int barWidth = 20; // Largura de cada barra
+		int barHeight = 10; // Altura de cada barra
+		int spacing = 5; // Espaçamento entre as barras
+	
+		// Define a posição da barra de volume à esquerda da tela
+		int x = 40; // Justificado à esquerda, com margem de 40 pixels
+		int y = m.getHeight() - barHeight - 40; // Posição no rodapé, com margem de 40 pixels da borda inferior
+	
+		// Desenha as barras de volume
+		for (int i = 0; i < maxVolume; i++) {
+			if (i < volume) {
+				g.setColor(Color.GREEN); // Barra preenchida
+			} else {
+				g.setColor(Color.GRAY); // Barra vazia
+			}
+			g.fillRect(x, y, barWidth, barHeight); // Desenha a barra
+			x += barWidth + spacing; // Move para a próxima barra
+		}
+	
+		// Instruções para ajustar o volume
+		g.setColor(Color.WHITE);
+		String instructions = "Press '+' to increase, '-' to decrease";
+		g.drawString(instructions, 40, y + barHeight + 30); // Exibe as instruções logo abaixo das barras
+	
+		// Desenha os sinais de + e - nas laterais da barra de volume
+		String plus = "+";
+		String minus = "-";
+		
+		// Coloca o sinal de + do lado direito das barras
+		g.drawString(plus, x, y + barHeight / 2 + 5); // Exibe o sinal de + ao lado direito das barras
+		
+		// Coloca o sinal de - do lado esquerdo das barras (40 é a margem inicial da barra)
+		g.drawString(minus, 20, y + barHeight / 2 + 5); // Exibe o sinal de - ao lado esquerdo das barras
+	
+		// Exibe a porcentagem de volume à esquerda, abaixo das barras
+		String volumeText = "Volume: " + (int)((volume / maxVolume) * 100) + "%";
+		g.drawString(volumeText, 40, y + barHeight + 15); // Texto de volume
+	}
+	
 
-}
+}	
