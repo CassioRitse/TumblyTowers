@@ -12,7 +12,7 @@ public class Statics {
 	public static final boolean SHOW_CONTROLLER_EVENTS = !RELEASE_MODE && false; // Mostra eventos do controlador apenas em modo de desenvolvimento
 
 	// Configurações de desempenho
-    public static final int FPS = 30; // Frames por segundo
+    public static final int FPS = 40; // Frames por segundo
 
 	// Configurações de tela
     public static final float STD_CELL_SIZE = 4f; // Tamanho padrão das células em unidades lógicas
